@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import microservice.donaciones.model.Donacion;
 import microservice.donaciones.service.DonacionService;
 
 @RestController
-@RequestMapping("/api/donaciones")
+@RequestMapping("/donaciones")
 public class DonacionController {
 
     @Autowired
@@ -25,18 +26,14 @@ public class DonacionController {
     @GetMapping
     public ResponseEntity<List<Donacion>> obtenerTodas() {
         List<Donacion> lista = service.obtenerDonaciones();
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
+        if (lista.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Donacion> obtenerPorId(@PathVariable Integer id) {
         Donacion d = service.obtenerDonacionPorId(id);
-        if (d == null) {
-            return ResponseEntity.notFound().build();
-        }
+        if (d == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(d);
     }
 
@@ -49,18 +46,14 @@ public class DonacionController {
     @PutMapping("/{id}")
     public ResponseEntity<Donacion> actualizar(@PathVariable Integer id, @RequestBody Donacion donacion) {
         Donacion actualizada = service.actualizarDonacion(id, donacion);
-        if (actualizada == null) {
-            return ResponseEntity.notFound().build();
-        }
+        if (actualizada == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(actualizada);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Donacion> actualizarParcial(@PathVariable Integer id, @RequestBody Donacion donacion) {
         Donacion actualizada = service.actualizarDonacionParcial(id, donacion);
-        if (actualizada == null) {
-            return ResponseEntity.notFound().build();
-        }
+        if (actualizada == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(actualizada);
     }
 
@@ -70,41 +63,43 @@ public class DonacionController {
         return ResponseEntity.noContent().build();
     }
 
-    // Filtros
+    //FILTROS
 
     @GetMapping("/estado/{estadoId}")
     public ResponseEntity<List<Donacion>> porEstado(@PathVariable Integer estadoId) {
         List<Donacion> lista = service.obtenerPorEstado(estadoId);
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
+        if (lista.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/donante/{uid}")
     public ResponseEntity<List<Donacion>> porDonante(@PathVariable String uid) {
         List<Donacion> lista = service.obtenerPorDonante(uid);
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
+        if (lista.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/centro/{centroId}")
     public ResponseEntity<List<Donacion>> porCentro(@PathVariable Integer centroId) {
         List<Donacion> lista = service.obtenerPorCentro(centroId);
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
+        if (lista.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/recurso/{tipoId}")
     public ResponseEntity<List<Donacion>> porTipoRecurso(@PathVariable Integer tipoId) {
         List<Donacion> lista = service.obtenerPorTipoRecurso(tipoId);
-        if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
+        if (lista.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/estado/{estadoId}/centro/{centroId}")
+    public ResponseEntity<List<Donacion>> porEstadoYCentro(
+            @PathVariable Integer estadoId,
+            @PathVariable Integer centroId) {
+
+        List<Donacion> lista = service.obtenerPorEstadoYCentro(estadoId, centroId);
+        if (lista.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(lista);
     }
 }

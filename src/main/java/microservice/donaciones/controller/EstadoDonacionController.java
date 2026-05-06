@@ -16,7 +16,7 @@ import microservice.donaciones.model.EstadoDonacion;
 import microservice.donaciones.service.EstadoDonacionService;
 
 @RestController
-@RequestMapping("/api/estados-donacion")
+@RequestMapping("/estados-donacion")
 public class EstadoDonacionController {
 
     @Autowired

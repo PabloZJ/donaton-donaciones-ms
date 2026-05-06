@@ -2,8 +2,10 @@ package microservice.donaciones.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import jakarta.transaction.Transactional;
 import microservice.donaciones.model.Donacion;
 import microservice.donaciones.repository.DonacionRepository;
@@ -15,23 +17,23 @@ public class DonacionService {
     @Autowired
     private DonacionRepository donacionRepository;
 
-    //Obtener todas
+    // Obtener todas
     public List<Donacion> obtenerDonaciones() {
         return donacionRepository.findAll();
     }
 
-    //Obtener por ID
+    // Obtener por ID
     public Donacion obtenerDonacionPorId(Integer id) {
         return donacionRepository.findById(id).orElse(null);
     }
 
-    //Guardar
+    // Guardar
     public Donacion guardarDonacion(Donacion donacion) {
         donacion.setFechaRegistro(LocalDateTime.now());
         return donacionRepository.save(donacion);
     }
 
-    //Actualizar completa (PUT)
+    // PUT (actualización completa)
     public Donacion actualizarDonacion(Integer id, Donacion donacion) {
         Donacion existente = donacionRepository.findById(id).orElse(null);
 
@@ -41,7 +43,7 @@ public class DonacionService {
             existente.setDonanteUid(donacion.getDonanteUid());
             existente.setCentroAcopioId(donacion.getCentroAcopioId());
             existente.setEstado(donacion.getEstado());
-            existente.setFechaRegistro(donacion.getFechaRegistro());
+            existente.setFechaCita(donacion.getFechaCita());
             existente.setObservacion(donacion.getObservacion());
 
             return donacionRepository.save(existente);
@@ -50,11 +52,12 @@ public class DonacionService {
         return null;
     }
 
-    //Actualizar parcial (PATCH)
+    // PATCH (actualización parcial)
     public Donacion actualizarDonacionParcial(Integer id, Donacion donacion) {
         Donacion existente = donacionRepository.findById(id).orElse(null);
 
         if (existente != null) {
+
             if (donacion.getTipoRecursoId() != null)
                 existente.setTipoRecursoId(donacion.getTipoRecursoId());
 
@@ -70,8 +73,8 @@ public class DonacionService {
             if (donacion.getEstado() != null)
                 existente.setEstado(donacion.getEstado());
 
-            if (donacion.getFechaRegistro() != null)
-                existente.setFechaRegistro(donacion.getFechaRegistro());
+            if (donacion.getFechaCita() != null)
+                existente.setFechaCita(donacion.getFechaCita());
 
             if (donacion.getObservacion() != null)
                 existente.setObservacion(donacion.getObservacion());
@@ -82,7 +85,7 @@ public class DonacionService {
         return null;
     }
 
-    //Eliminar
+    // Eliminar
     public void eliminarDonacion(Integer id) {
         Donacion donacion = donacionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Donación no encontrada"));
@@ -90,7 +93,7 @@ public class DonacionService {
         donacionRepository.delete(donacion);
     }
 
-    //Filtros
+    // Filtros
 
     public List<Donacion> obtenerPorEstado(Integer estadoId) {
         return donacionRepository.findByEstadoId(estadoId);
@@ -106,5 +109,9 @@ public class DonacionService {
 
     public List<Donacion> obtenerPorTipoRecurso(Integer tipoId) {
         return donacionRepository.findByTipoRecursoId(tipoId);
+    }
+
+    public List<Donacion> obtenerPorEstadoYCentro(Integer estadoId, Integer centroId) {
+        return donacionRepository.findByEstadoIdAndCentroAcopioId(estadoId, centroId);
     }
 }

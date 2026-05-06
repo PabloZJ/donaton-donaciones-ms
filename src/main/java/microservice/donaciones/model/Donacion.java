@@ -45,6 +45,9 @@ public class Donacion {
     @Column(name = "fecha_registro", nullable = false)
     private LocalDateTime fechaRegistro;
 
+    @Column(name = "fecha_cita")
+    private LocalDateTime fechaCita;
+
     @Column(columnDefinition = "TEXT")
     private String observacion;
 }
